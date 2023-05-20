@@ -1,10 +1,10 @@
-import {Note} from './note';
+import {NoteData} from './note';
 
 export interface NoteState {
-  notes: Array<Note>;
+  notes: Array<NoteData>;
 }
 
-const dummyNotes: Array<Note> = [
+const dummyNotes: Array<NoteData> = [
   {
     id: 0,
     title: '0',

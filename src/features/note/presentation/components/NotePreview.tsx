@@ -1,16 +1,17 @@
 import React from 'react';
 import {Card, Text} from 'react-native-paper';
-import {Note} from '../model';
+import {NoteData} from '../../data/model';
 
 type Props = {
-  note: Note;
+  note: NoteData;
+  onPress: () => void;
 };
 
 const NotePreview = (props: Props) => {
-  const {note} = props;
+  const {note, onPress} = props;
 
   return (
-    <Card>
+    <Card onPress={onPress}>
       <Card.Title title={note.title} />
       <Card.Content>
         <Text numberOfLines={1} variant="bodyMedium">

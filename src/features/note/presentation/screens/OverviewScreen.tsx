@@ -1,20 +1,31 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
-import NotePreview from '../components/NotePreview';
-import {Note} from '../model';
-import {useAppSelector} from '../../../core/redux/hooks';
 import {FAB} from 'react-native-paper';
+import {useNotesDependencies} from '../../../../core/di';
+import {NoteStackParamList} from '../../../../core/navigation/paramList';
+import {NoteData} from '../../data/model';
+import NotePreview from '../components/NotePreview';
+import {useOverviewController} from '../hooks';
 
 const OverviewScreen = () => {
   const {width} = Dimensions.get('window');
   const flatListColumn = 2;
   const itemWidth = width / flatListColumn;
 
-  const notes = useAppSelector(state => state.appReducer.note.notes);
+  const noteDependencies = useNotesDependencies();
+  const {notes} = useOverviewController(noteDependencies.notesUseCase);
 
-  const renderNotePreview = (note: Note) => (
+  const navigation = useNavigation<NavigationProp<NoteStackParamList>>();
+
+  const renderNotePreview = (note: NoteData) => (
     <View style={{width: itemWidth}}>
-      <NotePreview note={note} />
+      <NotePreview
+        note={note}
+        onPress={() => {
+          navigation.navigate('Details', {noteId: ''});
+        }}
+      />
     </View>
   );
 
@@ -22,7 +33,7 @@ const OverviewScreen = () => {
     <View style={styles.container}>
       <FlatList
         data={notes}
-        numColumns={2}
+        numColumns={flatListColumn}
         renderItem={({item}) => renderNotePreview(item)}
         keyExtractor={(_item, index) => '' + index}
         contentContainerStyle={styles.flatListContent}
